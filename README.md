@@ -1,2 +1,6 @@
 # workConfig
-Local confs for bash, vim and tmux
+This Repository contains scripts and config files for:
+
+* bash
+* vim
+* tmux
