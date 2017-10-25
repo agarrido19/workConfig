@@ -24,3 +24,12 @@ hi! link Todo YellowR
 
 " Powerline
 set rtp+=$HOME/.local/lib/python2.6/site-packages/powerline/bindings/vim/
+
+" Move to the next tab
+nnoremap <silent> <C-m> :tabnext<CR>
+inoremap <silent> <C-m> :tabnext<CR>
+vnoremap <silent> <C-m> :tabnext<CR>
+" Move to the previous tab
+nnoremap <silent> <C-n> :tabprevious<CR>
+inoremap <silent> <C-n> :tabprevious<CR>
+vnoremap <silent> <C-n> :tabprevious<CR>
