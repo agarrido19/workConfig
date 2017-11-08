@@ -1,4 +1,3 @@
-clear
 uptime
 export LS_OPTIONS='--color=auto'
 eval "`dircolors`"
@@ -10,83 +9,13 @@ export HISTFILESIZE=2000
 export HISTCONTROL=ignoreboth:erasedups
 # append to the history instead of overwriting (good for multiple connections)
 shopt -s histappend
-
-#Aliases
-alias ls='ls $LS_OPTIONS'
-alias ll='ls -la'
-
-#ADE aliases 
-alias adebeginfromtrans="ade begintrans -xbranchmerge -fromtrans "
-alias aderefreshlatest="ade refreshview -latest"
-alias aderefreshtip="ade refreshview -tip"
-alias adedesctrans="ade describetrans "
-alias merge1="ade beginmerge "
-alias merge2="ade mergetrans "
-alias merge3="ade endmerge "
-alias useview="ade useview "
-alias lsviews="ade lsviews"
-alias pwv="ade pwv"
-alias cde='cd $ADE_VIEW_ROOT/ecs'
-alias adedfp='ade diff -user_diff $1 -preb'
-alias adedf='ade diff -user_diff $1 -label'
-#alias mreq='/usr/dev_infra/generic/mergereq/cli/mergereq -y -r DBCS_ARM_WW_GRP@ORACLE.COM -m DBCS_ARM_WW_GRP@ORACLE.COM'
-
-#alias sqlplus_sys="sqlplus system/welcome1@den01gdd:1621/orcl30091420.us.oracle.com "
-
-### Views/Txns shorcuts ###
-#alias mergereq='/usr/dev_infra/generic/mergereq/cli/mergereq -y -m oscar.gueta@oracle.com -r dbcs_arm_ww_grp@oracle.com'
-#alias orareview='/usr/dev_infra/generic/bin/orareview  -u -e vim -r '
-#alias view_make_app="$ADE_VIEW_ROOT/ecs/ecra/make_app"
-
-#Oracle proxys 
-alias proxyup='export http_proxy="www-proxy.us.oracle.com:80" ; export https_proxy="www-proxy.us.oracle.com:80"  ; export ftp_proxy="www-proxy.us.oracle.com:80"'
-alias proxydown='unset http_proxy ; unset https_proxy ; unset ftp_proxy'
-
-#Exabox aliases
-alias agentStart='bin/exacloud --agent start'
-alias agentStartDa='bin/exacloud --agent start -da'
-alias agentStop='bin/exacloud --agent stop'
-alias agentStatus='bin/exacloud --agent status'
-
-#Useful aliases
-alias mkdir='mkdir -pv'
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-alias path='echo -e ${PATH//:/\\n}'
-alias du='du -kh'   
-alias df='df -kTh'
-
-#Edit files fast
-alias vibashrc='vim ~/.bashrc'
-alias srbashrc='. ~/.bashrc'
-alias viprofile='vim ~/.bash_profile'
-alias srprofile='. ~/.bash_profile'
-alias virc='vim ~/.vimrc'
-
-#Common typos
-alias l='ls'
-alias sl='ls'
-alias xs='cd'
-alias vf='cd'
-alias cd..='cd ..'
-alias kk='ll'
-
-#Stop after sending count ECHO_REQUEST packets 
-alias ping='ping -c 1'
-alias ping4='ping -c 4'
-#Do not wait interval 1 second, go fast #
-alias fastping='ping -c 100 -s.2'
-#Open ports
-alias ports='netstat -tulanp'
-#Other useful aliases
-alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
-alias path='echo -e ${PATH//:/\\n}'
-alias now='date +"%T"'
-alias nowtime=now
-alias nowdate='date +"%d-%m-%Y"'
-## distro specifc RHEL/CentOS ##
-alias update='sudo yum -y update'
+# disable (XON/XOFF flow control) enable Ctrl-s and Ctrl-q
+bind -r '/C-s'
+stty -ixon
+# Alias definitions
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
 
 #Functions
 #-------------------------------------------------------------
@@ -273,3 +202,10 @@ function ask()          # See 'killps' for example of use.
         *) return 1 ;;
     esac
 }
+
+function forecast()              # get forecast
+{
+    # change to your default location
+    curl -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Zapopan}"
+}
+

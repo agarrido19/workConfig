@@ -1,7 +1,7 @@
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
-export PATH=$PATH:/sbin:~/opt/tmux2/bin:~/.local/bin
+export PATH=$PATH:/sbin:~/opt/tmux2/bin:~/opt/python3/bin:~/.local/bin
 export LD_LIBRARY_PATH=~/.local/lib:$LD_LIBRARY_PATH
 
 if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
