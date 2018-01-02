@@ -205,7 +205,19 @@ function ask()          # See 'killps' for example of use.
 
 function forecast()              # get forecast
 {
-    # change to your default location
-    curl -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Zapopan}"
+   while true; do
+    case $1 in
+        -t | --today)
+            curl -s wttr.in/zapopan?m | head -n 17; return 0 ;;
+         \?)
+            echo "Invalid option: -$1" >&2; return 1 ;;
+    esac
+   done 
+   # change to your default location
+   curl -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Zapopan}?m"
 }
 
+function top10()
+{
+    history | awk '{print $2}' | sort | uniq -c | sort -rn | head -10
+}
