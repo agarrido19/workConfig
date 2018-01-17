@@ -2,9 +2,9 @@ if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
 
-export EDITOR=/usr/bin/vim
+export EDITOR=~/opt/vim8/bin/vim
 export DISPLAY=localhost:1
-export PATH=$PATH:/sbin:~/opt/tmux2/bin:~/opt/xclip/bin:~/opt/python3/bin:~/.local/bin
+export PATH=$PATH:/sbin:~/opt/rlwrap/bin:~/opt/vim8/bin:~/opt/tmux2/bin:~/opt/xclip/bin:~/opt/python3/bin:~/.local/bin
 export LD_LIBRARY_PATH=~/.local/lib:$LD_LIBRARY_PATH
 
 # If tmux is running attach to the session otherwise create DEV session
