@@ -1,9 +1,11 @@
-uptime
-export LS_OPTIONS='--color=auto'
+#Environment Variables
+#-------------------------------------------------------------
 eval "`dircolors`"
-export PS1="\[\033[38;5;8m\]\u@\h:\[$(tput sgr0)\]\[\033[38;5;33m\][\[$(tput sgr0)\]\[\033[38;5;33m\]\w]\\$\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+# jump more efficiently into the history
+bind '"\e[A":history-search-backward'
+bind '"\e[A":history-search-backward'
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZ=2000
+export HISTSIZE=2000
 export HISTFILESIZE=2000
 # ignore duplicates in history
 export HISTCONTROL=ignoreboth:erasedups
@@ -16,12 +18,19 @@ stty -ixon
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+# PS1
+# export PS1="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]\$\[\]\[\033[38;5;15m\] \[\033[00m\]"
+# Get view name without _user if variable is set
+[ -z "${ADE_VIEW_NAME+x}" ] || export VIEW_NAME="(${ADE_VIEW_NAME#*_})"
+# Change bash prompt only if it is set to default (i.e. when entering a view) TODO ade_dirty
+[ "$PS1" = "\\s-\\v\\\$ " ] && PS1="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]\\[\033[0;36m\]\$VIEW_NAME\[\033[1;31m\]\$ADE_DIRTY\[\033[38;5;15m\]\$\[\033[00m\] "
+# LD_LIBRARY_PATH
+[ -z "${LD_LIBRARY_PATH+x}" ] || export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib
 
 #Functions
 #-------------------------------------------------------------
 # File & strings related functions:
 #-------------------------------------------------------------
-
 
 # Find a file with a pattern in name:
 function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
@@ -113,7 +122,7 @@ function sanitize() { chmod -R u=rwX,g=rX,o= "$@" ;}
 
 function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
 function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
-function os_ver(){  cat /etc/redhat-release ; }
+function os_ver(){  cat /etc/oracle-release ; }
 
 function killps()   # kill by process name
 {

@@ -1,8 +1,11 @@
-# Compiled Form Modules
-*.fmx
+# Ignore this extensions
+.DS_Store
+.*.swp
 
-# Compiled Menu Modules
-*.mmx
-
-# Compiled Pre-Linked Libraries
-*.plx
+# Ignore Vim and Tmux Plugins
+.vim/autoload/*
+.vim/sessions/*
+.vim/plugged/*
+.tmux/resurrect/
+.tmux/plugins/*
+!.tmux/plugins/tpm
