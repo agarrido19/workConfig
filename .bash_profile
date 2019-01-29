@@ -2,6 +2,11 @@
 #By contrast a terminal session in login mode will ask you for user name and password and execute the ~/.bash_profile script. (i.e. when you log on to a remote system through SSH, or run a script)
 
 ### Environment Variables  ###
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTSIZE=2000
+export HISTFILESIZE=2000
+# ignore duplicates in history
+export HISTCONTROL=ignoreboth:erasedups
 export EDITOR=~/opt/vim81/bin/vim
 export DISPLAY=localhost:13
 ### PS1 ###
@@ -12,7 +17,7 @@ export PS1="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]
 #export PS2="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]\\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
 
 ### ADE ###
-export ADE_MERGE_TOOL=~/opt/vim8/bin/vimdiff
+export ADE_MERGE_TOOL=~/scripts/bin/usermerge.sh
 
 ### Oracle Home ###
 #export ORACLE_HOME=/scratch/agarrido/ecra_installs/mainDB/db_home/orcl30091420/oracle/product/11.2.0/dbhome_1
@@ -46,16 +51,17 @@ pathmunge () {
 # Path manipulation
 if [ `id -u` != 0 ]; then
         pathmunge ~/scripts/bin before   
-        pathmunge ~/opt/xclip/bin before   
+        pathmunge ~/.local/bin before   
+        pathmunge /scratch/agarrido/opt/rlwrap/bin before   
+        pathmunge /scratch/agarrido/opt/htop2/bin before   
+        pathmunge /scratch/agarrido/opt/xclip/bin before   
+        pathmunge ~/opt/vim81/bin before
+        pathmunge ~/opt/tmux28/bin before   
         pathmunge ~/opt/python2/bin before   
         pathmunge ~/opt/python3/bin before   
-        pathmunge ~/opt/htop2/bin before   
-        pathmunge ~/opt/rlwrap/bin before   
-        pathmunge ~/opt/tmux2/bin before   
-        pathmunge ~/opt/vim81/bin before
 fi
-unset pathmunge
 export PATH
+
 
 # If exist, source bashrc
 if [ -f ~/.bashrc ]; then
@@ -65,8 +71,9 @@ fi
 if [ `hostname` = "slc12hsc" ]; then
     export EDITOR=/usr/bin/vim
     export ADE_MERGE_TOOL=/usr/bin/vimdiff
-    export PATH=${PATH/#"/home/agarrido/opt/vim81/bin:"/}   
-    unset LD_LIBRARY_PATH
+    export PATH=${PATH//":/home/agarrido/opt/vim81/bin:"/":"}   
+    export PATH=${PATH//":/home/agarrido/.local/bin:"/":"}   
+    #unset LD_LIBRARY_PATH
 fi
 
 # If tmux is running attach to the session otherwise search for a saved session

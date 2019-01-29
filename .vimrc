@@ -1,21 +1,24 @@
 """"""""""""""""""
 " General settings
 """"""""""""""""""
-let mapleader="," "Leaderkey
-set number        "Show line numbers
-set ruler         "Show cursor position
-"set paste         "Paste from other places 
-syntax enable     "Enable syntax highlighting
-set hidden        "Allows buffers to be hidden
-set ignorecase    "Use case insensitive search
-set smartcase     "Except when using capital letters
-set nowrap        "Disable word wraping
-set sidescroll=1  "Scroll one character at a time
-set hlsearch      "Enables highlighting for searches
-set backspace=2   "Allow backspacing over everything
-set laststatus=2  "Always display the statusline in all windows
-set showtabline=2 "Always display the tabline, even if there is only one tab
-set noshowmode    "Hide the default mode text (e.g. -- INSERT -- below the statusline)
+let mapleader=","  "Leaderkey
+set number         "Show line numbers
+set ruler          "Show cursor position
+"set paste          "Paste from other places 
+syntax enable      "Enable syntax highlighting
+set hidden         "Allows buffers to be hidden
+set ignorecase     "Use case insensitive search
+set smartcase      "Except when using capital letters
+set nowrap         "Disable word wraping
+set sidescroll=1   "Scroll one character at a time
+set hlsearch       "Enables highlighting for searches
+set splitright     "Open new splits in the right side
+set splitbelow     "Open new splits below the current
+set backspace=2    "Allow backspacing over everything
+set laststatus=2   "Always display the statusline in all windows
+set showtabline=2  "Always display the tabline, even if there is only one tab
+set noshowmode     "Hide the default mode text (e.g. -- INSERT -- below the statusline)
+set encoding=utf-8 "YouCompleteMe requires UTF-8 encoding
 "set mouse=a         
 
 " Colorscheme and highlighting 
@@ -41,8 +44,9 @@ if (empty($TMUX))
 endif
 
 " Powerline
-" set rtp+=$HOME/.local/lib/python2.6/site-packages/powerline/bindings/vim/
-set rtp+=$HOME/.local/lib/python3.6/site-packages/powerline/bindings/vim/
+" set rtp+=$HOME/.local/lib/python3.6/site-packages/powerline/bindings/vim/
+set rtp+=/home/agarrido/.local/lib/python3.7/site-packages/powerline/bindings/vim
+
 
 " Toggles highlight search
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
@@ -60,7 +64,7 @@ vnoremap // y/\V<C-R>"<CR>
 " Save with Ctrl-S
 noremap  <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>gv
-inoremap <silent> <C-S> <C-O>:update<CR>
+inoremap <silent> <C-S> <C-O>:update<CR><Esc>
 
 " Save and exit with Ctrl-X
 noremap  <silent> <C-X> :wq!<CR>
@@ -70,7 +74,7 @@ vnoremap <silent> <C-X> <Esc>:wq!<CR>
 nmap o o<Esc>
 
 " Disable macro recording
-map q <Nop>
+"map q <Nop>
 
 " Replace selected text with yank in visual mode
 vmap r "_dP
@@ -78,27 +82,9 @@ vmap r "_dP
 " Suspend vim in insert mode
 inoremap <c-z> <Esc><c-z>
 
-" Set paste when pasting in insert mode
-inoremap <silent> <Insert> <C-O>:set paste<CR>
-
-" Make shift-insert work like in Xterm
-" map <S-Insert> <MiddleMouse>
-" map! <S-Insert> <MiddleMouse>
-
-" Paste in insert mode
-" inoremap <C-v> <F2><C-r>+<F2>
-" Settings for coding python (Minimal configuration):
-"set autoindent   " Do smart autoindenting when starting a new line
-"set shiftwidth=4  " Set number of spaces per auto indentation
-"set expandtab     " When using <Tab>, put spaces instead of a <tab> character
-
-" Comment out a block of Python code
+" Comment out a block of code
 vnoremap <silent> # :s/^/#/<cr>:noh<cr>
 vnoremap <silent> -# :s/^#//<cr>:noh<cr>
-
-" Good to have for consistency
-"set tabstop=4   " Number of spaces that a <Tab> in the file counts for
-"set smarttab    " At <Tab> at beginning line inserts spaces set in shiftwidth
 
 """"""""""""""""""
 " F-keys
@@ -113,16 +99,22 @@ set pastetoggle=<F2>
 set showmode
 
 " F3: Toggle easily with F3
-map <F3> :NERDTreeTabsToggle<CR>
+map <F3> :NERDTreeToggle<CR>
 
 " F4: Gundo TODO 
 "nnoremap <F4> :GundoToggle<CR>
 
-" F5: Save & Compile Python TODO autocmd this
+" F5: Save & Compile Python
 nnoremap <F5> :update<bar>!python -m py_compile %<CR>
 
-" F6: Pylinttoogle TODO 
-"nnoremap <F4> :GundoToggle<CR>
+" F6: Pylinttoogle  
+map <F6> :PymodeLint<CR>
+
+" F7: Clean sign column  
+map <F7> :sign unplace *<CR>
+
+" F8: Toogle word wrap
+map <F8> :set wrap!<CR>
 
 """"""""""""""""""
 " Tabs
@@ -137,7 +129,16 @@ nnoremap  J gt
 nnoremap  K gT
 
 """"""""""""""""""
-" Splits & Buffers
+" Splits 
+""""""""""""""""""
+"Map ctrl-j/k/h/l to switch between splits
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+""""""""""""""""""
+" Buffers
 """"""""""""""""""
 
 " To open a new empty buffer
@@ -154,20 +155,55 @@ nnoremap H :bprevious<CR>
 " Close the current buffer and move to the previous one
 nnoremap <leader>q :bp <BAR> bd #<CR>
 
+" Wipe the current buffer and move to the previous one
+nnoremap <leader>w :bp <BAR> bw! #<CR>
+
 " List the available buffers and prepare :b for you
 nnoremap <Leader>b :ls<CR>:b<Space>
 
 """"""""""""""""""
 " Folds
 """"""""""""""""""
-"set foldlevelstart=99
-"nnoremap <Space> za
+set foldlevelstart=99
+nnoremap <Space> za
 "nnoremap <S-Space> zA
 "vnoremap <S-Space> zA
+
+"""""""""""""""""
+" Terminal
+""""""""""""""""""
+if(has('terminal'))
+    tnoremap <C-j> <C-w>j
+    tnoremap <C-k> <C-w>k
+    tnoremap <C-h> <C-w>h
+    tnoremap <C-l> <C-w>l
+    execute "set <M-l>=\el"
+    execute "set <M-h>=\eh"
+    tnoremap <M-l> <C-W>:bnext<CR>	
+    tnoremap <M-h> <C-W>:bprevious<CR>	
+    "tnoremap <C-Left>  :bnext<CR>	
+    "tnoremap <C-Right> :bprevious<CR>	
+    tnoremap <ESC><ESC> <C-\><C-N>
+    tnoremap <C-w>t <C-w>:tabnext<CR>
+endif
 
 """"""""""""""""""
 " Copy-Paste
 """"""""""""""""""
+" Using the system clipboard
+map <C-y> "+y
+map <C-p> "+p
+
+" Set paste when pasting in insert mode
+inoremap <silent> <Insert> <C-O>:set paste<CR>
+
+" Make shift-insert work like in Xterm
+" map <S-Insert> <MiddleMouse>
+" map! <S-Insert> <MiddleMouse>
+
+" Paste in insert mode
+" inoremap <C-v> <F2><C-r>+<F2>
+
 " paste tweak (automatically toggle paste-nopaste)
 "function! WrapForTmux(s)
 "  if !exists('$TMUX')
@@ -185,6 +221,8 @@ nnoremap <Leader>b :ls<CR>:b<Space>
 "  return ""
 "endfunction
 "inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+" If editing clucontrol disable some plugings
+autocmd VimEnter * if expand('%:t') == 'clucontrol.py'  | set redrawtime=10000 | endif
 
 """"""""""""""""""
 " Vim-plug
@@ -193,18 +231,22 @@ nnoremap <Leader>b :ls<CR>:b<Space>
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
 
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
+Plug 'bogado/file-line'
 Plug 'haya14busa/incsearch.vim'
+Plug 'tmux-plugins/vim-tmux'
 Plug 'tpope/vim-obsession'
+Plug 'irrationalistic/vim-tasks'
 Plug 'dhruvasagar/vim-prosession'
+Plug 'scrooloose/nerdtree', { 'on':  ['NERDTreeToggle', 'NERDTreeFind'] } "Loads only when opening NERDTree
 Plug 'jistr/vim-nerdtree-tabs'
-"Plug 'scrooloose/nerdtree', { 'on':  ['NERDTreeToggle', 'NERDTreeFind'] } "Loads only when opening NERDTree
-"Plug 'tmhedberg/SimpylFold'
-Plug 'python-mode/python-mode', { 'branch': 'develop' }
-if has('python') && (v:version >= 704 && (v:version == 703 && has('patch584')))
-  Plug '~/.vim/plugged/YouCompleteMe'
-  "Plug 'Valloric/YouCompleteMe', { 'do': function('hooks#YCMInstall') }
-  "Plug 'Valloric/YouCompleteMe', { 'do' : '/bin/python2 ~/.vim/plugged/YouCompleteMe/install.py ' }
+Plug 'Raimondi/delimitMate'
+if has('python') && (v:version >= 704 &&  @% != 'ovm/clucontrol.py')
+   Plug 'tmhedberg/SimpylFold'
+   Plug 'python-mode/python-mode', { 'branch': 'develop' }
+   Plug 'Valloric/YouCompleteMe', { 'do': function('hooks#YCMInstall') }
+   "Plug '~/.vim/plugged/YouCompleteMe'
+   "Plug 'Valloric/YouCompleteMe', { 'do' : '/bin/python2 ~/.vim/plugged/YouCompleteMe/install.py ' }
 endif
 "themes
 Plug 'reewr/vim-monokai-phoenix'
@@ -220,23 +262,33 @@ call plug#end()
 " Incsearch mappings 
 map /  <Plug>(incsearch-forward)
 
+" ycm
+" let g:ycm_key_invoke_completion = '<C-b>'
+let g:ycm_disable_for_files_larger_than_kb = 700
+
 " nerdtree
 let NERDTreeIgnore=['\.pyc$', '\~$']
 
-" pymode
+" pymode (python 2 syntax checking)
 let g:pymode_python = 'python'
-let g:pymode_indent = 1
-let g:pymode_rope = 0
-let g:pymode_doc = 1
-let g:pymode_doc_bind = '<leader>d'
+"let g:pymode_indent = 1
+"let g:pymode_rope = 0
+"let g:pymode_doc_bind = '<leader>d'
+nnoremap <leader>l :PyLint<cr> 
+" Override go-to.definition key shortcut to Ctrl-]
+let g:pymode_rope_goto_definition_bind = '<C-]>'
+let g:pymode_breakpoint_bind = '<leader>b'
 let g:pymode_run_bind = '<leader>r'
 let g:pymode_lint_on_write = 0
-let g:pymode_options_colorcolumn = 0
+let g:pymode_lint_message = 1
+let g:pymode_lint_ignore = ["E501", "W",]
+let g:pymode_lint_checkers = ['pep8']
+"let g:pymode_options_colorcolumn = 0
 " Pylint configuration file
 "let g:pymode_lint_config = '$HOME/.pylint.rc'
 "let g:pymode_options_max_line_length=120
 
-
 " symplyfold
-"let g:SimpylFold_docstring_preview = 1
-"let g:SimpylFold_fold_docstring = 0
+let g:SimpylFold_fold_import = 0
+let g:SimpylFold_docstring_preview = 1
+let g:SimpylFold_fold_docstring = 0

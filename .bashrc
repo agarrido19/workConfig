@@ -1,19 +1,17 @@
-#Environment Variables
-#-------------------------------------------------------------
 eval "`dircolors`"
-# jump more efficiently into the history
-bind '"\e[A":history-search-backward'
-bind '"\e[A":history-search-backward'
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=2000
-export HISTFILESIZE=2000
-# ignore duplicates in history
-export HISTCONTROL=ignoreboth:erasedups
+# If not running interactively, don't do anything
+#[[ "$-" != *i* ]] && return
+if [ -n "$PS1" ]; then
+        # Configure this only if shell is interactive
+	# jump more efficiently into the history
+	bind '"\e[A":history-search-backward'
+	bind '"\e[A":history-search-backward'
+	# disable (XON/XOFF flow control) enable Ctrl-s and Ctrl-q
+	bind -r '/C-s'
+	stty -ixon
+fi
 # append to the history instead of overwriting (good for multiple connections)
 shopt -s histappend
-# disable (XON/XOFF flow control) enable Ctrl-s and Ctrl-q
-bind -r '/C-s'
-stty -ixon
 # Alias definitions
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -21,12 +19,26 @@ fi
 # PS1
 # export PS1="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]\$\[\]\[\033[38;5;15m\] \[\033[00m\]"
 # Get view name without _user if variable is set
-[ -z "${ADE_VIEW_NAME+x}" ] || export VIEW_NAME="(${ADE_VIEW_NAME#*_})"
+[ -z "${ADE_VIEW_NAME+x}" ] || export VIEW_NAME="(${ADE_VIEW_NAME#*_})"; export ADE_MERGE_TOOL=~/scripts/bin/usermerge.sh
 # Change bash prompt only if it is set to default (i.e. when entering a view) TODO ade_dirty
 [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="\[\033[38;5;8m\]\u@\h:\[\]\[\033[38;5;33m\][\[\]\[\033[38;5;33m\]\W]\\[\033[0;36m\]\$VIEW_NAME\[\033[1;31m\]\$ADE_DIRTY\[\033[38;5;15m\]\$\[\033[00m\] "
 # LD_LIBRARY_PATH
 [ -z "${LD_LIBRARY_PATH+x}" ] || export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib
 
+# In this host use system vim
+#if [ `hostname` = "slc12hsc" ]; then
+#    export EDITOR=/usr/bin/vim
+#    export ADE_MERGE_TOOL=/usr/bin/vimdiff
+#    export PATH=${PATH/#"/home/agarrido/opt/vim81/bin:"/}
+#    unset  LD_LIBRARY_PATH
+#fi
+
+
+
+
+#if [ -f ~/.local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh ]; then
+#    source ~/.local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh
+#fi
 #Functions
 #-------------------------------------------------------------
 # File & strings related functions:
@@ -229,4 +241,9 @@ function forecast()              # get forecast
 function top10()
 {
     history | awk '{print $2}' | sort | uniq -c | sort -rn | head -10
+}
+
+function yumpy()
+{
+   python -c 'import yum, pprint; yb = yum.YumBase(); pprint.pprint(yb.conf.yumvar, width=1)'
 }
